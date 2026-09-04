@@ -113,3 +113,4 @@ body::after{width:38vw;height:38vw;right:-12vw;top:54vh;background:rgba(196,170,
 .test-feedback .corrected-sentence{font-family:var(--serif);font-size:18px;color:var(--ink);margin-top:12px}
 .test-reset{margin-top:14px;border:0;border-bottom:1px solid currentColor;background:transparent;padding:3px 0;color:var(--ink2);font:600 12px var(--sans);letter-spacing:.04em;cursor:pointer}
 .test-reset:hover,.test-reset:focus-visible{color:var(--ink);outline:none;border-bottom-width:2px}
+.test-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}.test-next{appearance:none;border:1px solid var(--ink,#17253b);background:var(--ink,#17253b);color:#fff;border-radius:999px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer}.test-next:hover{transform:translateY(-1px)}.test-next:focus-visible{outline:2px solid currentColor;outline-offset:3px}@media (prefers-reduced-motion:reduce){.test-next:hover{transform:none}}
