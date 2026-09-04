@@ -82,16 +82,17 @@ document.querySelectorAll('[data-quiz]').forEach(quiz=>{
   render();
 });
 
-/* ===== MOTION PASS V2 — visible scenes ===== */
+/* ===== MOTION V3 — visible scenes, desktop + mobile ===== */
 (() => {
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const body = document.body;
-  body.classList.add('motion-v2');
+  body.classList.remove('motion-v2');
+  body.classList.add('motion-v3');
 
-  /* A real floating dock: separate from the original header, so the change is visible. */
   const sourceHeader = document.querySelector('.site-header');
-  if (sourceHeader && !document.querySelector('.floating-dock')) {
-    const dock = document.createElement('div');
+  let dock = document.querySelector('.floating-dock');
+  if (sourceHeader && !dock) {
+    dock = document.createElement('div');
     dock.className = 'floating-dock';
     dock.setAttribute('aria-label', 'Быстрая навигация');
     dock.innerHTML = `
@@ -99,50 +100,62 @@ document.querySelectorAll('[data-quiz]').forEach(quiz=>{
       <nav>${sourceHeader.querySelector('nav')?.innerHTML || ''}</nav>
       <a class="dock-cta" href="#contact">Написать</a>`;
     document.body.appendChild(dock);
-
-    const hero = document.querySelector('.hero');
-    const updateDock = () => {
-      const threshold = hero ? hero.offsetTop + hero.offsetHeight * .62 : 420;
-      dock.classList.toggle('is-visible', window.scrollY > threshold);
-    };
-    updateDock();
-    window.addEventListener('scroll', updateDock, {passive:true});
   }
 
-  /* Build semantic pieces for the manifest. */
+  const hero = document.querySelector('.hero');
+  const updateDock = () => {
+    if (!dock || !sourceHeader) return;
+    const heroBottom = hero ? hero.getBoundingClientRect().bottom : 0;
+    const show = heroBottom <= 88;
+    dock.classList.toggle('is-visible', show);
+    sourceHeader.classList.toggle('is-hidden-for-dock', show);
+  };
+  updateDock();
+  addEventListener('scroll', updateDock, {passive:true});
+  addEventListener('resize', updateDock, {passive:true});
+
   const manifest = document.querySelector('.manifest');
   const manifestText = manifest?.querySelector('p');
   if (manifestText && !manifestText.querySelector('.manifest-part')) {
     manifestText.innerHTML = '<span class="manifest-part">Стало понятно</span><span class="manifest-arrow" aria-hidden="true">→</span><span class="manifest-part">стало получаться</span><span class="manifest-arrow" aria-hidden="true">→</span><span class="manifest-part">появилась уверенность</span>';
   }
 
-  /* Mark the key scenes only. */
   const scenes = [
     document.querySelector('.recognition'),
     document.querySelector('.manifest'),
     document.querySelector('.method'),
     document.querySelector('.exam'),
-    document.querySelector('.about'),
-    document.querySelector('.format')
+    document.querySelector('.about')
   ].filter(Boolean);
+  const format = document.querySelector('.format');
 
   if (reduceMotion || !('IntersectionObserver' in window)) {
-    scenes.forEach(el => el.classList.add('scene-active'));
+    [...scenes, format].filter(Boolean).forEach(el => el.classList.add('scene-active'));
     body.classList.add('motion-loaded');
     return;
   }
 
   const io = new IntersectionObserver(entries => {
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      entry.target.classList.add('scene-active');
-      io.unobserve(entry.target);
-    }
-  }, {
-    threshold: .08,
-    rootMargin: '0px 0px -4% 0px'
-  });
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('scene-active');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:.12, rootMargin:'0px 0px -12% 0px'});
   scenes.forEach(el => io.observe(el));
+
+  if (format) {
+    const priceObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          requestAnimationFrame(() => entry.target.classList.add('scene-active'));
+          priceObserver.unobserve(entry.target);
+        }
+      });
+    }, {threshold:.28, rootMargin:'0px 0px -8% 0px'});
+    priceObserver.observe(format);
+  }
 
   requestAnimationFrame(() => requestAnimationFrame(() => body.classList.add('motion-loaded')));
 })();

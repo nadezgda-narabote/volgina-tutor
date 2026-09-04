@@ -345,3 +345,56 @@ section:nth-of-type(3n+2)::after{content:none!important;display:none!important}
   .motion-v2 .exam .exam-inner>div,.motion-v2 .about figure,.motion-v2 .about figure img,.motion-v2 .about .about-copy,
   .motion-v2 .format .price-grid article{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important;transition:none!important}
 }
+
+/* ===== MOTION V3 FIXES ===== */
+/* The opening header and the floating dock are mutually exclusive. */
+.site-header{transition:opacity .22s ease,visibility .22s ease,transform .28s ease!important}
+.site-header.is-hidden-for-dock{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transform:translateY(-18px)!important}
+.floating-dock{transition:opacity .22s ease,transform .34s cubic-bezier(.2,.8,.2,1),visibility .22s!important}
+
+/* V3 scene selectors. */
+.motion-v3 .recognition .situation{opacity:0;filter:blur(7px);transition:transform .72s cubic-bezier(.18,.82,.2,1),opacity .48s ease,filter .5s ease}
+.motion-v3 .recognition .s1{transform:translate(-110px,-52px) rotate(-5deg) scale(.9)}
+.motion-v3 .recognition .s2{transform:translate(125px,-38px) rotate(4deg) scale(.9)}
+.motion-v3 .recognition .s3{transform:translate(-92px,18px) rotate(3deg) scale(.91)}
+.motion-v3 .recognition .s4{transform:translate(118px,42px) rotate(-4deg) scale(.9)}
+.motion-v3 .recognition .s5{transform:translate(-105px,70px) rotate(-3deg) scale(.9)}
+.motion-v3 .recognition.scene-active .situation{opacity:1;filter:none;transform:none}
+.motion-v3 .recognition.scene-active .s2{transition-delay:.07s}.motion-v3 .recognition.scene-active .s3{transition-delay:.14s}.motion-v3 .recognition.scene-active .s4{transition-delay:.21s}.motion-v3 .recognition.scene-active .s5{transition-delay:.28s}
+
+.motion-v3 .manifest p{display:flex;align-items:center;justify-content:center;gap:.22em;flex-wrap:wrap;overflow:visible}
+.motion-v3 .manifest .manifest-part,.motion-v3 .manifest .manifest-arrow{display:inline-block;opacity:0;transition:transform .68s cubic-bezier(.16,.88,.22,1),opacity .38s ease}
+.motion-v3 .manifest .manifest-part:nth-of-type(1){transform:translateX(-120px) scale(.9)}
+.motion-v3 .manifest .manifest-part:nth-of-type(3){transform:translateY(58px) scale(.9)}
+.motion-v3 .manifest .manifest-part:nth-of-type(5){transform:translateX(120px) scale(.9)}
+.motion-v3 .manifest .manifest-arrow{transform:scaleX(0);transform-origin:left center;color:var(--ink2)}
+.motion-v3 .manifest.scene-active .manifest-part{opacity:1;transform:none}.motion-v3 .manifest.scene-active .manifest-arrow{opacity:.55;transform:scaleX(1)}
+.motion-v3 .manifest.scene-active p>*:nth-child(2){transition-delay:.12s}.motion-v3 .manifest.scene-active p>*:nth-child(3){transition-delay:.20s}.motion-v3 .manifest.scene-active p>*:nth-child(4){transition-delay:.32s}.motion-v3 .manifest.scene-active p>*:nth-child(5){transition-delay:.40s}
+
+.motion-v3 .method .steps article{opacity:0;transition:transform .72s cubic-bezier(.18,.82,.2,1),opacity .42s ease}.motion-v3 .method .steps article:nth-child(1){transform:translateX(-85px) rotate(-2deg)}.motion-v3 .method .steps article:nth-child(2){transform:translateY(65px)}.motion-v3 .method .steps article:nth-child(3){transform:translateX(85px) rotate(2deg)}.motion-v3 .method.scene-active .steps article{opacity:1;transform:none}
+.motion-v3 .exam .exam-inner>div:first-child{opacity:0;transform:translateX(-100px);transition:opacity .45s ease,transform .75s cubic-bezier(.18,.82,.2,1)}.motion-v3 .exam .exam-inner>div:last-child{opacity:0;transform:translateX(100px);transition:opacity .45s ease .08s,transform .75s cubic-bezier(.18,.82,.2,1) .08s}.motion-v3 .exam.scene-active .exam-inner>div{opacity:1;transform:none}
+.motion-v3 .about figure{overflow:hidden;clip-path:inset(0 46% 0 46%);transition:clip-path .9s cubic-bezier(.17,.84,.2,1)}.motion-v3 .about figure img{transform:scale(1.12);transition:transform 1.05s cubic-bezier(.17,.84,.2,1)}.motion-v3 .about.scene-active figure{clip-path:inset(0)}.motion-v3 .about.scene-active figure img{transform:scale(1)}
+
+@media(min-width:901px){
+  .motion-v3 .format .price-grid{position:relative;overflow:visible;background:transparent;border-color:transparent}
+  .motion-v3 .format .price-grid article{opacity:.35;background:var(--paper2);box-shadow:0 28px 75px rgba(23,47,87,.2);transition:transform 1.15s cubic-bezier(.14,.9,.2,1),opacity .42s ease,box-shadow .8s ease}
+  .motion-v3 .format .price-grid article:first-child{transform:translateX(52%) rotate(-6deg) scale(.91);z-index:2}
+  .motion-v3 .format .price-grid article:last-child{transform:translateX(-52%) rotate(6deg) scale(.91);z-index:1;border-left:1px solid var(--line)}
+  .motion-v3 .format.scene-active .price-grid{border-color:var(--line)}
+  .motion-v3 .format.scene-active .price-grid article{opacity:1;transform:none;box-shadow:none}
+  .motion-v3 .format.scene-active .price-grid article:last-child{transition-delay:.10s}
+}
+
+/* Mobile: compact semantic chain, not half a screen of empty space. */
+@media(max-width:600px){
+  .manifest{min-height:205px!important;padding:28px 0!important}
+  .motion-v3 .manifest p{display:flex!important;flex-direction:column;gap:7px!important;margin:0 16px!important;font-size:28px!important;line-height:1.08!important}
+  .motion-v3 .manifest .manifest-part{display:block!important;margin:0!important;transform:translateY(24px) scale(.96)!important}
+  .motion-v3 .manifest .manifest-arrow{display:block!important;margin:0!important;line-height:1!important;transform:rotate(90deg) scaleX(0)!important;transform-origin:center!important;font-size:20px!important}
+  .motion-v3 .manifest.scene-active .manifest-part{transform:none!important;opacity:1!important}
+  .motion-v3 .manifest.scene-active .manifest-arrow{transform:rotate(90deg) scaleX(1)!important;opacity:.55!important}
+  .floating-dock{width:calc(100% - 24px);justify-content:space-between;border-radius:18px;top:12px}
+  .floating-dock nav{display:none}
+}
+
+@media(prefers-reduced-motion:reduce){.site-header.is-hidden-for-dock{opacity:1!important;visibility:visible!important;transform:none!important}.floating-dock{display:none!important}}
