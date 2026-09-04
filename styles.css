@@ -124,3 +124,91 @@ body::after{width:38vw;height:38vw;right:-12vw;top:54vh;background:rgba(196,170,
 .format-note{margin:0;align-self:end;font-size:16px;color:var(--muted);max-width:420px}
 .price-grid article>small{display:block;margin-top:6px;color:var(--muted);font-size:13px;line-height:1.45}
 @media(max-width:900px){.format-note{margin-top:-12px}}
+
+/* ===== MOTION PASS ===== */
+/* Remove the decorative line + circle that read as an orphan UI element. */
+section:nth-of-type(3n+2)::before,
+section:nth-of-type(3n+2)::after{content:none!important;display:none!important}
+.nowrap{white-space:nowrap}
+
+/* Header -> compact floating dock after the first screen. */
+.site-header{
+  position:sticky;top:12px;z-index:60;
+  transition:width .45s cubic-bezier(.2,.75,.2,1),height .45s cubic-bezier(.2,.75,.2,1),
+    padding .45s cubic-bezier(.2,.75,.2,1),background-color .35s,border-color .35s,box-shadow .35s,border-radius .35s;
+}
+.site-header.is-docked{
+  width:min(820px,calc(100% - 32px));height:62px;padding:0 16px;
+  background:rgba(255,253,248,.82);border:1px solid rgba(23,47,87,.14);border-radius:999px;
+  box-shadow:0 14px 42px rgba(23,47,87,.09);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)
+}
+.site-header.is-docked .brand span{display:none}
+.site-header nav a{display:inline-block;transform-origin:center;transition:transform .22s ease,opacity .22s ease,color .22s ease}
+.site-header nav a:hover,.site-header nav a:focus-visible{transform:translateY(-1px) scale(1.06);color:var(--ink)}
+.site-header nav:has(a:hover) a:not(:hover){opacity:.58;transform:scale(.97)}
+
+/* Quiet hero entrance. */
+.motion-ready .hero-copy>*{opacity:0;transform:translateY(16px)}
+.motion-ready .hero-photo{opacity:0;transform:translateY(18px) scale(.985)}
+.motion-ready.is-loaded .hero-copy>*{opacity:1;transform:none;transition:opacity .7s ease,transform .85s cubic-bezier(.2,.75,.2,1)}
+.motion-ready.is-loaded .hero-copy>*:nth-child(2){transition-delay:.08s}
+.motion-ready.is-loaded .hero-copy>*:nth-child(3){transition-delay:.16s}
+.motion-ready.is-loaded .hero-copy>*:nth-child(4){transition-delay:.23s}
+.motion-ready.is-loaded .hero-photo{opacity:1;transform:none;transition:opacity .85s ease .12s,transform 1s cubic-bezier(.2,.75,.2,1) .12s}
+
+/* Semantic reveal: not everything fades the same way. */
+.reveal-soft{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .85s cubic-bezier(.2,.75,.2,1)}
+.reveal-soft.in-view{opacity:1;transform:none}
+
+/* Recognition cards assemble into the cloud. */
+.motion-ready .recognition .situation{opacity:0;transform:translateY(26px) scale(.975);filter:blur(3px)}
+.motion-ready .recognition.in-view .situation{opacity:1;transform:none;filter:none;transition:opacity .58s ease,transform .75s cubic-bezier(.2,.75,.2,1),filter .58s ease}
+.motion-ready .recognition.in-view .s1{transition-delay:.05s}
+.motion-ready .recognition.in-view .s2{transition-delay:.13s}
+.motion-ready .recognition.in-view .s3{transition-delay:.21s}
+.motion-ready .recognition.in-view .s4{transition-delay:.29s}
+.motion-ready .recognition.in-view .s5{transition-delay:.37s}
+
+/* Manifest: each thought arrives in order. */
+.motion-ready .manifest p{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.18em .28em}
+.motion-ready .manifest p>.manifest-part,.motion-ready .manifest p>span{opacity:0;transform:translateY(18px)}
+.motion-ready .manifest.in-view p>.manifest-part,.motion-ready .manifest.in-view p>span{opacity:1;transform:none;transition:opacity .55s ease,transform .7s cubic-bezier(.2,.75,.2,1)}
+.motion-ready .manifest.in-view p>*:nth-child(1){transition-delay:.02s}.motion-ready .manifest.in-view p>*:nth-child(2){transition-delay:.14s}.motion-ready .manifest.in-view p>*:nth-child(3){transition-delay:.24s}.motion-ready .manifest.in-view p>*:nth-child(4){transition-delay:.36s}.motion-ready .manifest.in-view p>*:nth-child(5){transition-delay:.48s}
+
+/* Method: logic is built step by step. */
+.motion-ready .steps article{opacity:0;transform:translateY(24px)}
+.motion-ready .method.in-view .steps article{opacity:1;transform:none;transition:opacity .65s ease,transform .8s cubic-bezier(.2,.75,.2,1)}
+.motion-ready .method.in-view .steps article:nth-child(2){transition-delay:.13s}
+.motion-ready .method.in-view .steps article:nth-child(3){transition-delay:.26s}
+.motion-ready .principle{opacity:0;transform:translateX(24px)}
+.motion-ready .method.in-view .principle{opacity:1;transform:none;transition:opacity .7s ease .28s,transform .85s cubic-bezier(.2,.75,.2,1) .28s}
+
+/* About image: editorial clip reveal instead of a card animation. */
+.motion-ready .about figure{clip-path:inset(9% 7% 10% 7% round 0);transform:scale(.985);transition:clip-path 1.15s cubic-bezier(.2,.75,.2,1),transform 1.15s cubic-bezier(.2,.75,.2,1)}
+.motion-ready .about.in-view figure{clip-path:inset(0 0 0 0 round 0);transform:none}
+
+/* Pricing: two sheets start as a stack and settle into the final grid. */
+@media(min-width:901px){
+  .motion-ready .format .price-grid{perspective:1200px;overflow:visible}
+  .motion-ready .format .price-grid article{opacity:0;transform:translateX(46%) rotate(.7deg);transform-origin:center;transition:opacity .65s ease,transform .9s cubic-bezier(.2,.75,.2,1)}
+  .motion-ready .format .price-grid article+article{transform:translateX(-46%) rotate(-.7deg)}
+  .motion-ready .format.in-view .price-grid article{opacity:1;transform:none}
+  .motion-ready .format.in-view .price-grid article+article{transition-delay:.12s}
+}
+
+/* Test card gets a tiny physical response, not a bouncing UI effect. */
+.mini-test{transition:transform .35s cubic-bezier(.2,.75,.2,1),box-shadow .35s ease}
+.mini-test:focus-within{transform:translateY(-3px);box-shadow:0 28px 70px rgba(23,47,87,.075)}
+
+@media(max-width:900px){
+  .site-header{top:8px}.site-header.is-docked{width:calc(100% - 24px);height:58px}
+  .motion-ready .about figure{clip-path:inset(5% 4% 6% 4%)}
+}
+@media(max-width:600px){
+  .site-header.is-docked{border-radius:18px;padding:0 12px}
+  .motion-ready .manifest p{display:block}.motion-ready .manifest p>*{display:block;margin:.2em 0}
+  .motion-ready .recognition .situation{filter:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .site-header,.site-header *,.reveal-soft,.hero-copy>*,.hero-photo,.recognition .situation,.manifest p>*,.steps article,.principle,.about figure,.format .price-grid article,.mini-test{transition:none!important;transform:none!important;opacity:1!important;filter:none!important;clip-path:none!important}
+}

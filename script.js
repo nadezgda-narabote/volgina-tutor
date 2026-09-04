@@ -81,3 +81,42 @@ document.querySelectorAll('[data-quiz]').forEach(quiz=>{
   next.addEventListener('click',()=>{index=index===quizData.length-1?0:index+1;render();holder.querySelector('[data-choice]')?.focus()});
   render();
 });
+
+/* ===== MOTION PASS ===== */
+(() => {
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const body = document.body;
+  body.classList.add('motion-ready');
+
+  // Split the central transformation into semantic beats for sequential reveal.
+  const manifest = document.querySelector('.manifest');
+  const manifestText = manifest?.querySelector('p');
+  if (manifestText && !manifestText.querySelector('.manifest-part')) {
+    manifestText.innerHTML = '<span class="manifest-part">Стало понятно</span><span aria-hidden="true">→</span><span class="manifest-part">стало получаться</span><span aria-hidden="true">→</span><span class="manifest-part">появилась уверенность</span>';
+  }
+
+  // A few quiet text reveals only where they improve rhythm.
+  document.querySelectorAll('.subjects article,.exam-inner>div,.cases .section-title,.about-copy,.faq .section-title,.contact-inner').forEach(el => el.classList.add('reveal-soft'));
+
+  const observed = document.querySelectorAll('.recognition,.manifest,.method,.about,.format,.reveal-soft');
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    observed.forEach(el => el.classList.add('in-view'));
+    body.classList.add('is-loaded');
+  } else {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      });
+    }, { threshold: .16, rootMargin: '0px 0px -8% 0px' });
+    observed.forEach(el => io.observe(el));
+    requestAnimationFrame(() => requestAnimationFrame(() => body.classList.add('is-loaded')));
+  }
+
+  // Dock-inspired compact navigation after the hero begins leaving the viewport.
+  const header = document.querySelector('.site-header');
+  const updateDock = () => header?.classList.toggle('is-docked', window.scrollY > 170);
+  updateDock();
+  window.addEventListener('scroll', updateDock, { passive: true });
+})();
