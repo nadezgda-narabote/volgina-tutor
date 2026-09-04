@@ -118,3 +118,9 @@ body::after{width:38vw;height:38vw;right:-12vw;top:54vh;background:rgba(196,170,
 /* final editorial fixes */
 .logic-line b{display:inline-flex;align-items:center;align-self:center;line-height:1;transform:translateY(-.04em)}
 .test-feedback .formula{display:flex;align-items:center;gap:.5em;font-size:12px;line-height:1.45;letter-spacing:.105em;color:var(--ink);font-weight:700;margin-top:22px;padding-top:15px;border-top:1px solid rgba(23,47,87,.12)}
+
+/* final editorial/layout pass before motion */
+.format .section-title{align-items:end}
+.format-note{margin:0;align-self:end;font-size:16px;color:var(--muted);max-width:420px}
+.price-grid article>small{display:block;margin-top:6px;color:var(--muted);font-size:13px;line-height:1.45}
+@media(max-width:900px){.format-note{margin-top:-12px}}
