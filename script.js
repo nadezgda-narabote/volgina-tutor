@@ -82,80 +82,67 @@ document.querySelectorAll('[data-quiz]').forEach(quiz=>{
   render();
 });
 
-/* ===== MOTION V3 — visible scenes, desktop + mobile ===== */
+/* ===== MOTION — one observer system for all scroll scenes ===== */
 (() => {
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const body = document.body;
-  body.classList.remove('motion-v2');
-  body.classList.add('motion-v3');
-
   const sourceHeader = document.querySelector('.site-header');
+  const hero = document.querySelector('.hero');
   let dock = document.querySelector('.floating-dock');
+
   if (sourceHeader && !dock) {
     dock = document.createElement('div');
     dock.className = 'floating-dock';
     dock.setAttribute('aria-label', 'Быстрая навигация');
+    dock.setAttribute('aria-hidden', 'true');
     dock.innerHTML = `
-      <a class="dock-brand" href="#top">НВ</a>
+      <a class="dock-brand" href="#top" aria-label="Наверх">НВ</a>
       <nav>${sourceHeader.querySelector('nav')?.innerHTML || ''}</nav>
       <a class="dock-cta" href="#contact">Написать</a>`;
     document.body.appendChild(dock);
   }
 
-  const hero = document.querySelector('.hero');
+  let dockFrame = 0;
   const updateDock = () => {
-    if (!dock || !sourceHeader) return;
-    const heroBottom = hero ? hero.getBoundingClientRect().bottom : 0;
-    const show = heroBottom <= 0;
+    dockFrame = 0;
+    if (!dock || !hero) return;
+    const show = hero.getBoundingClientRect().bottom <= 0;
     dock.classList.toggle('is-visible', show);
-    sourceHeader.classList.toggle('is-hidden-for-dock', show);
+    dock.setAttribute('aria-hidden', String(!show));
+  };
+  const requestDockUpdate = () => {
+    if (!dockFrame) dockFrame = requestAnimationFrame(updateDock);
   };
   updateDock();
-  addEventListener('scroll', updateDock, {passive:true});
-  addEventListener('resize', updateDock, {passive:true});
+  addEventListener('scroll', requestDockUpdate, {passive:true});
+  addEventListener('resize', requestDockUpdate, {passive:true});
 
-  const manifest = document.querySelector('.manifest');
-  const manifestText = manifest?.querySelector('p');
+  const manifestText = document.querySelector('.manifest p');
   if (manifestText && !manifestText.querySelector('.manifest-part')) {
     manifestText.innerHTML = '<span class="manifest-part">Стало понятно</span><span class="manifest-arrow" aria-hidden="true">→</span><span class="manifest-part">стало получаться</span><span class="manifest-arrow" aria-hidden="true">→</span><span class="manifest-part">появилась уверенность</span>';
   }
 
   const scenes = [
-    document.querySelector('.recognition'),
+    document.querySelector('.recognition-layer'),
     document.querySelector('.manifest'),
-    document.querySelector('.method'),
-    document.querySelector('.exam'),
-    document.querySelector('.about')
+    document.querySelector('.steps'),
+    document.querySelector('.principle'),
+    document.querySelector('.exam-inner'),
+    document.querySelector('.about-grid'),
+    document.querySelector('.price-grid')
   ].filter(Boolean);
-  const format = document.querySelector('.format');
 
   if (reduceMotion || !('IntersectionObserver' in window)) {
-    [...scenes, format].filter(Boolean).forEach(el => el.classList.add('scene-active'));
-    body.classList.add('motion-loaded');
+    scenes.forEach(scene => scene.classList.add('scene-active'));
     return;
   }
 
-  const io = new IntersectionObserver(entries => {
+  document.body.classList.add('motion-enabled');
+  const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('scene-active');
-        io.unobserve(entry.target);
-      }
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('scene-active');
+      observer.unobserve(entry.target);
     });
-  }, {threshold:.12, rootMargin:'0px 0px -12% 0px'});
-  scenes.forEach(el => io.observe(el));
-
-  if (format) {
-    const priceObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          requestAnimationFrame(() => entry.target.classList.add('scene-active'));
-          priceObserver.unobserve(entry.target);
-        }
-      });
-    }, {threshold:.28, rootMargin:'0px 0px -8% 0px'});
-    priceObserver.observe(format);
-  }
-
-  requestAnimationFrame(() => requestAnimationFrame(() => body.classList.add('motion-loaded')));
+  }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
+  scenes.forEach(scene => observer.observe(scene));
 })();
