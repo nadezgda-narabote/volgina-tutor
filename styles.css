@@ -58,7 +58,7 @@ section:nth-of-type(3n+2)::before{content:"";position:absolute;right:3.5vw;top:c
 .micro-proof{margin-top:8px}
 .manifest{position:relative}
 .manifest::before{content:"";position:absolute;left:50%;top:50%;width:min(780px,82vw);height:150px;transform:translate(-50%,-50%);border-top:1px solid rgba(23,47,87,.12);border-bottom:1px solid rgba(23,47,87,.08);pointer-events:none}
-.about::after,#about::after{content:"Аа";position:absolute;right:2vw;bottom:2vw;pointer-events:none;font-family:var(--serif);font-style:italic;font-size:clamp(90px,14vw,210px);line-height:.8;color:var(--ink);opacity:.026}
+.about::after,#about::after{content:none}
 .steps h3::after,.cases h3::after{content:"";display:inline-block;width:28px;height:1px;margin-left:12px;vertical-align:middle;background:var(--ink);opacity:.24}
 @media(max-width:760px){section:nth-of-type(3n+2)::before,section:nth-of-type(3n+2)::after{display:none}.micro-viz{width:auto;flex-wrap:wrap}.manifest::before{height:120%}}
 
@@ -114,3 +114,7 @@ body::after{width:38vw;height:38vw;right:-12vw;top:54vh;background:rgba(196,170,
 .test-reset{margin-top:14px;border:0;border-bottom:1px solid currentColor;background:transparent;padding:3px 0;color:var(--ink2);font:600 12px var(--sans);letter-spacing:.04em;cursor:pointer}
 .test-reset:hover,.test-reset:focus-visible{color:var(--ink);outline:none;border-bottom-width:2px}
 .test-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}.test-next{appearance:none;border:1px solid var(--ink,#17253b);background:var(--ink,#17253b);color:#fff;border-radius:999px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer}.test-next:hover{transform:translateY(-1px)}.test-next:focus-visible{outline:2px solid currentColor;outline-offset:3px}@media (prefers-reduced-motion:reduce){.test-next:hover{transform:none}}
+
+/* final editorial fixes */
+.logic-line b{display:inline-flex;align-items:center;align-self:center;line-height:1;transform:translateY(-.04em)}
+.test-feedback .formula{display:flex;align-items:center;gap:.5em;font-size:12px;line-height:1.45;letter-spacing:.105em;color:var(--ink);font-weight:700;margin-top:22px;padding-top:15px;border-top:1px solid rgba(23,47,87,.12)}
