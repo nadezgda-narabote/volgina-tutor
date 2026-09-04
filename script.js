@@ -106,7 +106,7 @@ document.querySelectorAll('[data-quiz]').forEach(quiz=>{
   const updateDock = () => {
     if (!dock || !sourceHeader) return;
     const heroBottom = hero ? hero.getBoundingClientRect().bottom : 0;
-    const show = heroBottom <= 88;
+    const show = heroBottom <= 0;
     dock.classList.toggle('is-visible', show);
     sourceHeader.classList.toggle('is-hidden-for-dock', show);
   };

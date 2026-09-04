@@ -398,3 +398,20 @@ section:nth-of-type(3n+2)::after{content:none!important;display:none!important}
 }
 
 @media(prefers-reduced-motion:reduce){.site-header.is-hidden-for-dock{opacity:1!important;visibility:visible!important;transform:none!important}.floating-dock{display:none!important}}
+
+/* ===== HEADER / DOCK HARD FIX =====
+   The opening header belongs to normal document flow. It must scroll away with
+   the hero; only the separate floating dock may stay fixed. */
+.site-header,
+.site-header.is-docked{
+  position:relative!important;
+  top:auto!important;
+  left:auto!important;
+  transform:none;
+}
+.site-header.is-hidden-for-dock{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  transform:none!important;
+}
