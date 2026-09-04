@@ -82,41 +82,67 @@ document.querySelectorAll('[data-quiz]').forEach(quiz=>{
   render();
 });
 
-/* ===== MOTION PASS ===== */
+/* ===== MOTION PASS V2 — visible scenes ===== */
 (() => {
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const body = document.body;
-  body.classList.add('motion-ready');
+  body.classList.add('motion-v2');
 
-  // Split the central transformation into semantic beats for sequential reveal.
+  /* A real floating dock: separate from the original header, so the change is visible. */
+  const sourceHeader = document.querySelector('.site-header');
+  if (sourceHeader && !document.querySelector('.floating-dock')) {
+    const dock = document.createElement('div');
+    dock.className = 'floating-dock';
+    dock.setAttribute('aria-label', 'Быстрая навигация');
+    dock.innerHTML = `
+      <a class="dock-brand" href="#top">НВ</a>
+      <nav>${sourceHeader.querySelector('nav')?.innerHTML || ''}</nav>
+      <a class="dock-cta" href="#contact">Написать</a>`;
+    document.body.appendChild(dock);
+
+    const hero = document.querySelector('.hero');
+    const updateDock = () => {
+      const threshold = hero ? hero.offsetTop + hero.offsetHeight * .62 : 420;
+      dock.classList.toggle('is-visible', window.scrollY > threshold);
+    };
+    updateDock();
+    window.addEventListener('scroll', updateDock, {passive:true});
+  }
+
+  /* Build semantic pieces for the manifest. */
   const manifest = document.querySelector('.manifest');
   const manifestText = manifest?.querySelector('p');
   if (manifestText && !manifestText.querySelector('.manifest-part')) {
-    manifestText.innerHTML = '<span class="manifest-part">Стало понятно</span><span aria-hidden="true">→</span><span class="manifest-part">стало получаться</span><span aria-hidden="true">→</span><span class="manifest-part">появилась уверенность</span>';
+    manifestText.innerHTML = '<span class="manifest-part">Стало понятно</span><span class="manifest-arrow" aria-hidden="true">→</span><span class="manifest-part">стало получаться</span><span class="manifest-arrow" aria-hidden="true">→</span><span class="manifest-part">появилась уверенность</span>';
   }
 
-  // A few quiet text reveals only where they improve rhythm.
-  document.querySelectorAll('.subjects article,.exam-inner>div,.cases .section-title,.about-copy,.faq .section-title,.contact-inner').forEach(el => el.classList.add('reveal-soft'));
+  /* Mark the key scenes only. */
+  const scenes = [
+    document.querySelector('.recognition'),
+    document.querySelector('.manifest'),
+    document.querySelector('.method'),
+    document.querySelector('.exam'),
+    document.querySelector('.about'),
+    document.querySelector('.format')
+  ].filter(Boolean);
 
-  const observed = document.querySelectorAll('.recognition,.manifest,.method,.about,.format,.reveal-soft');
   if (reduceMotion || !('IntersectionObserver' in window)) {
-    observed.forEach(el => el.classList.add('in-view'));
-    body.classList.add('is-loaded');
-  } else {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('in-view');
-        io.unobserve(entry.target);
-      });
-    }, { threshold: .16, rootMargin: '0px 0px -8% 0px' });
-    observed.forEach(el => io.observe(el));
-    requestAnimationFrame(() => requestAnimationFrame(() => body.classList.add('is-loaded')));
+    scenes.forEach(el => el.classList.add('scene-active'));
+    body.classList.add('motion-loaded');
+    return;
   }
 
-  // Dock-inspired compact navigation after the hero begins leaving the viewport.
-  const header = document.querySelector('.site-header');
-  const updateDock = () => header?.classList.toggle('is-docked', window.scrollY > 170);
-  updateDock();
-  window.addEventListener('scroll', updateDock, { passive: true });
+  const io = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add('scene-active');
+      io.unobserve(entry.target);
+    }
+  }, {
+    threshold: .08,
+    rootMargin: '0px 0px -4% 0px'
+  });
+  scenes.forEach(el => io.observe(el));
+
+  requestAnimationFrame(() => requestAnimationFrame(() => body.classList.add('motion-loaded')));
 })();
