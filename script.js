@@ -82,6 +82,129 @@ document.querySelectorAll('[data-quiz]').forEach(quiz=>{
   render();
 });
 
+const reviewData=[
+  {
+    id:'natalya-alekseevna',name:'Наталья Алексеевна',role:'мама ученицы',publicationStatus:'published',
+    text:[
+      'Хочу выразить огромную благодарность этому замечательному педагогу за подготовку моей дочери к ОГЭ по русскому языку! Это настоящий профессионал своего дела и высококвалифицированный специалист. Она обладает редким даром — умеет находить подход к современным подросткам и выстраивать с ними доверительный контакт.',
+      'В процессе обучения она в меру строга, что очень помогает держать дисциплину, но при этом на занятиях всегда комфортная атмосфера. Дочь занималась с удовольствием, ведь учитель умеет вовремя и к месту пошутить, разрядить обстановку и объяснить даже самую сложную тему простым языком. Спасибо за ваш труд, терпение и отличный результат! Рекомендую всем!'
+    ],
+    preview:['Хочу выразить огромную благодарность этому замечательному педагогу за подготовку моей дочери к ОГЭ по русскому языку! Это настоящий профессионал своего дела и высококвалифицированный специалист. Она обладает редким даром — умеет находить подход к современным подросткам и выстраивать с ними доверительный контакт.']
+  },
+  {
+    id:'alyona',name:'Алёна',role:'ученица, занимается с 8 класса',publicationStatus:'published',
+    text:[
+      'Очень компетентный преподаватель, помимо хорошей подачи знаний, на уроках приятная атмосфера. Надежда Александровна может как быстро, так и в спокойном темпе подготовить к экзаменам.',
+      'Сама занимаюсь с 8 класса. Сначала просто прорабатывали проблемы, затем в 9 классе готовилась к ОГЭ (сдала на желаемый результат), а в данный момент к ЕГЭ 💞'
+    ]
+  },
+  {
+    id:'sasha',name:'Саша',role:'отзыв об индивидуальных занятиях',publicationStatus:'pending-permission',
+    text:['Супер педагог! Очень внимательно относится к подбору материалы, постоянно интересуется, все ли понятно, если нет, материал повторяется! Материал преподносится очень легко и интересно, не успеваешь замечать, как занятие подходит к концу. Виден интерес к кому, чтобы все было отработано и понятно учеником! Огромна благодарность, всем советую данного специалиста 💕💕💕']
+  },
+  {
+    id:'maria',name:'Мария',role:'ученица, ОГЭ по литературе',class:'9 класс',publicationStatus:'pending-permission',
+    text:[
+      'Я занималась с Надеждой Александровной в 9 классе, мы готовились к ОГЭ по литературе! Я всегда считала, что это нереально подготовиться к такому серьезному и непростому экзамену меньше, чем за год, но Надежда Александровна доказала обратное😁',
+      'мне посчастливилось, и мой репетитор по литературе был по совместительству преподавателем русского языка и литературы в моей школе, поэтому я и выбрала, собственно, Надежду Александровну в качестве репетитора, потому что я знала, как она может увлечь и заинтересовать в своих предметах!',
+      'Занимались мы очень активно, не теряли времени, но и не гнали сломя голову, за что я очень благодарна!',
+      'Очень рада, что Надежда Александровна была моим преподавателем несколько лет, ведь именно благодаря ей я полюбила литературу!',
+      'P.S. огэ я сдала на 5!😅'
+    ],
+    preview:['Я занималась с Надеждой Александровной в 9 классе, мы готовились к ОГЭ по литературе! Я всегда считала, что это нереально подготовиться к такому серьезному и непростому экзамену меньше, чем за год, но Надежда Александровна доказала обратное😁']
+  },
+  {
+    id:'mama-dani',name:'Мама Дани',role:'русский язык и литература',publicationStatus:'pending-permission',
+    text:['Надежда Александровна, здравствуйте!','Получили сегодня результаты по литературе и это 5! Ну это что-то невозможное), мама в шоке)','Он когда выходил с экзамена, сказал, что рассчитывает не больше, чем на 3, было одно задание вообще очень сложное для него. А тут такое!','Спасибо Вам огромное за ваше терпение, ваш профессионализм, без вас бы Даня не справился!','И по русскому тоже 5!']
+  },
+  {
+    id:'ekaterina',name:'Екатерина',role:'мама Юли',publicationStatus:'pending-permission',
+    text:['Доброе утро, Надежда Александровна, большое спасибо вам за ваш труд, у Юли твердая четверка вышла) я очень рада и она тоже 🌷❤️','У них уже на следующей неделе уже заканчивается учеба.. хотела предложить уже встретиться в следующем учебном году 😔 если вы конечно не будет против взять Юлю опять на занятия ❤️']
+  },
+  {
+    id:'anastasia',name:'Анастасия',role:'мама ученика',class:'9 класс',publicationStatus:'pending-permission',
+    text:['29 баллов','Позанимались то всего ничего - а результат очевиден','Это ваша заслуга 🌹']
+  },
+  {
+    id:'igor',name:'Игорь',role:'папа ученика',class:'9 класс',publicationStatus:'draft-unverified',
+    text:['С русским у сына всегда было по принципу «авось пронесёт». Ошибся — ну и ладно, к ОГЭ отношение было примерно такое же. После занятий хотя бы начал понимать, где именно у него проблемы, и перестал просто угадывать ответы.','А для меня главный показатель — дома стало гораздо меньше «сядь позанимайся» и «ты всё сделал?». Большую часть подготовки он уже контролировал сам. Надежда при этом без сюсюканья, но и без постоянных нотаций. С моим сыном такой вариант сработал.']
+  }
+];
+
+const caseData=[
+  {id:'school-program-7',meta:'7 класс · школьная программа',came:'правила знает, но самостоятельно применять их в письменных работах не получается.',worked:'ищем причины ошибок и выстраиваем самопроверку.',result:'Ученик начинает чаще замечать и исправлять ошибки самостоятельно.'},
+  {id:'essay-9',meta:'9 класс · сочинение',came:'«не знаю, что писать», ступор перед пустым листом.',worked:'раскладываем сочинение на понятные шаги.',result:'Появляется понятный порядок действий — начать писать становится проще.'},
+  {id:'literature-11',meta:'11 класс · литература',came:'произведения прочитаны, но трудно использовать их в рассуждении.',worked:'учимся формулировать позицию и доказывать её текстом.',result:'Ученик увереннее ориентируется в произведениях и использует их осознанно.'},
+  {id:'russian-oge',meta:'9 класс · ОГЭ по русскому языку',came:'подготовка к ОГЭ по русскому языку.',result:'29 баллов, оценка 4.'}
+];
+
+document.querySelectorAll('[data-stories]').forEach(stories=>{
+  const tabs=[...stories.querySelectorAll('[data-story-tab]')];
+  const panel=stories.querySelector('.stories-panel');
+  const card=stories.querySelector('[data-story-card]');
+  const position=stories.querySelector('[data-story-position]');
+  const previous=stories.querySelector('[data-story-prev]');
+  const next=stories.querySelector('[data-story-next]');
+  const collections={reviews:reviewData.filter(item=>item.publicationStatus==='published'),cases:caseData};
+  let active='reviews';
+  const indices={reviews:0,cases:0};
+  let expanded=false;
+
+  const paragraphs=items=>items.map(text=>`<p>${text}</p>`).join('');
+  const render=()=>{
+    const items=collections[active];
+    const index=Math.min(indices[active],items.length-1);
+    indices[active]=Math.max(0,index);
+    const item=items[indices[active]];
+    expanded=false;
+    if(active==='reviews'){
+      const hasPreview=Array.isArray(item.preview);
+      const visibleText=hasPreview?item.preview:item.text;
+      const meta=[item.role,item.class].filter(Boolean).join(' · ');
+      card.innerHTML=`<article><h3>${item.name}</h3><p class="story-meta">${meta}</p><div class="story-text">${paragraphs(visibleText)}</div>${hasPreview?'<button type="button" class="story-toggle" aria-expanded="false">Читать полностью</button>':''}</article>`;
+      const toggle=card.querySelector('.story-toggle');
+      toggle?.addEventListener('click',()=>{
+        expanded=!expanded;
+        card.querySelector('.story-text').innerHTML=paragraphs(expanded?item.text:item.preview);
+        card.querySelector('.story-text').classList.toggle('is-expanded',expanded);
+        toggle.textContent=expanded?'Свернуть':'Читать полностью';
+        toggle.setAttribute('aria-expanded',String(expanded));
+      });
+    }else{
+      const fields=[['С чем пришли',item.came,''],['Над чем работали',item.worked,''],['Результат',item.result,'is-result']].filter(([,value])=>value);
+      card.innerHTML=`<article><h3>${item.meta}</h3><div class="case-fields">${fields.map(([label,value,className])=>`<p class="case-field ${className}"><strong>${label}</strong>${value}</p>`).join('')}</div></article>`;
+    }
+    position.textContent=`${indices[active]+1} / ${items.length}`;
+    previous.disabled=indices[active]===0;
+    next.disabled=indices[active]===items.length-1;
+  };
+
+  const selectTab=tab=>{
+    active=tab.dataset.storyTab;
+    tabs.forEach(button=>{
+      const selected=button===tab;
+      button.setAttribute('aria-selected',String(selected));
+      button.tabIndex=selected?0:-1;
+    });
+    panel.setAttribute('aria-labelledby',tab.id);
+    indices[active]=Math.min(indices[active],collections[active].length-1);
+    render();
+  };
+  tabs.forEach((tab,tabIndex)=>{
+    tab.addEventListener('click',()=>selectTab(tab));
+    tab.addEventListener('keydown',event=>{
+      if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+      event.preventDefault();
+      const target=event.key==='Home'?0:event.key==='End'?tabs.length-1:(tabIndex+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
+      tabs[target].focus();
+      selectTab(tabs[target]);
+    });
+  });
+  previous.addEventListener('click',()=>{if(indices[active]>0){indices[active]-=1;render()}});
+  next.addEventListener('click',()=>{if(indices[active]<collections[active].length-1){indices[active]+=1;render()}});
+  render();
+});
+
 /* ===== MOTION — one observer system for all scroll scenes ===== */
 (() => {
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
