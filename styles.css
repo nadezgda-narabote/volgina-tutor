@@ -327,6 +327,7 @@ footer{background:#222124;color:rgba(244,240,232,.68)}
 .story-card h3{margin:0;font-family:var(--serif);font-size:32px;font-weight:400;color:var(--ink);line-height:1.15}
 .story-meta{margin:8px 0 26px;color:var(--ink2);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
 .story-text{max-width:790px;font-family:var(--serif);font-size:21px;line-height:1.55;color:var(--ink)}
+.story-card h3+.story-text{margin-top:26px}
 .story-text p{margin:0 0 16px}
 .story-text.is-expanded{max-height:330px;overflow-y:auto;padding-right:22px;scrollbar-gutter:stable}
 .story-toggle{display:inline-block;border:0;border-bottom:1px solid currentColor;background:transparent;padding:0;margin-top:4px;color:var(--ink2);font-size:14px}
